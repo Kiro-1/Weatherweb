@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>www.weatherapp.com</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #location-input {
+            font-size: 24px; /* Increase font size */
+            padding: 15px; /* Increase padding */
+            width: 350px; /* Increase width */
+        }
+        button {
+            font-size: 24px; /* Increase font size */
+            padding: 15px; /* Increase padding */
+        }
+    </style>
+</head>
+<body>
+
+<a href="hackedprank.html">CLICK THIS FOR ADVANCE WEATHER </a>
+
+ 
+</body><script src="sooby.js"></script>
+
+
+<h2>SOOBY WEATHER</h2>
+<input type="text" id="location-input" placeholder="Enter city, country">
+<button onclick="searchWeather()">Search</button>
+<div id="weather-info"></div>
+
+<script>
+function searchWeather() {
+    var locationInput = document.getElementById("location-input").value.trim(); // Trim the input to remove leading and trailing spaces
+    var [city, country] = locationInput.split(',').map(item => item.trim());
+    if (!city || !country) {
+        var weatherInfo = document.getElementById("weather-info");
+        weatherInfo.innerHTML = "Please enter both the city and the country.";
+        return;
+    }
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=f3e93f9ddcf28e1e66b6a8117bd1f123`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch weather data. Please try again later.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            var tempCelsius = (data.main.temp - 273.15).toFixed(2); // Convert temperature from Kelvin to Celsius
+            var weatherInfo = document.getElementById("weather-info");
+            weatherInfo.innerHTML = `Weather in ${city}, ${country}: <br> Temperature: ${tempCelsius}°C <br> Condition: ${data.weather[0].description}`;
+        })
+        .catch(error => {
+            console.error('Error fetching weather data:', error);
+            var weatherInfo = document.getElementById("weather-info");
+            weatherInfo.innerHTML = error.message;
+        });
+}
+</script>
+
+</body>
+</html>
